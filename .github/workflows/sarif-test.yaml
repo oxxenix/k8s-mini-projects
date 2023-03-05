@@ -1,0 +1,36 @@
+name: CodeQL check
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ '*' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMG_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://github.com
+
+    steps:    
+    - name: Checkout
+      uses: actions/checkout@master
+      
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: go
+ 
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+  
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+       sarif_file: results.sarif    
