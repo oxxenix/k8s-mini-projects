@@ -7,7 +7,7 @@ on:
     branches: [ main, fork ]
 
 jobs:
-  build:
+  codeQL-init:
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -21,11 +21,29 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: go
- 
+        
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-  
+   
+  codeQL-upload:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://github.com 
+    
+    steps:  
+    - name: Checkout
+      uses: actions/checkout@master
+      
+    - name: Check results.sarif file
+      run: | 
+        cat results.sarif
+        
     - name: Upload result to GitHub Code Scanning
+      if: ${{ github.event_name != 'pull_request' }}
       uses: github/codeql-action/upload-sarif@v2
       with:
-       sarif_file: results.json    
+          sarif_file: results.sarif
+          wait-for-processing: true
+          
+          
