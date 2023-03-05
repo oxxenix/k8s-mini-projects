@@ -35,8 +35,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
       
+    - name: Check results.sarif file
+      run: | 
+        cat results.sarif
+        
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v2
       with:
           sarif_file: results.sarif
           wait-for-processing: true
+          
+          
