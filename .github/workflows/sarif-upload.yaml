@@ -15,3 +15,4 @@ jobs:
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: cov-result.sarif
+          wait-for-processing: true
